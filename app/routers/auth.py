@@ -54,8 +54,11 @@ def login(
     db: Session = Depends(get_db)
 ):
     """Login user and return JWT token."""
-    # Authenticate user
-    user = db.query(User).filter(User.username == form_data.username).first()
+    # Authenticate user by username or email
+    user = db.query(User).filter(
+        (User.username == form_data.username) | (User.email == form_data.username)
+    ).first()
+    
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
