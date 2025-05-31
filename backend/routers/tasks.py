@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from app.core.cache import cache
-from app.database import get_db
-from app.models import Task, User
-from app.schemas.task import TaskCreate, TaskUpdate, Task as TaskSchema
-from app.core.security import oauth2_scheme
-from app.core.security import verify_token
+from core.cache import cache
+from database import get_db
+from models import Task, User
+from schemas.task import TaskCreate, TaskUpdate, Task as TaskSchema
+from core.security import oauth2_scheme
+from core.security import verify_token
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -43,14 +43,17 @@ async def read_tasks(
     current_user: User = Depends(get_current_user)
 ):
     """Get all tasks for current user."""
-    cache_key = f"tasks_user_{current_user.id}"
+    cache_key = f"tasks:user:{current_user.id}:{skip}:{limit}"
     cached_tasks = cache.get(cache_key)
     if cached_tasks:
         return cached_tasks
     
     tasks = db.query(Task).filter(Task.owner_id == current_user.id).offset(skip).limit(limit).all()
-    task_list = [TaskSchema.model_validate(task).model_dump() for task in tasks]
-    cache.set(cache_key, task_list)
+    # Convert to schema objects for proper serialization
+    task_list = [TaskSchema.model_validate(task) for task in tasks]
+    # Convert to dict for caching
+    task_dicts = [task.model_dump() for task in task_list]
+    cache.set(cache_key, task_dicts)
     return task_list
 
 @router.get("/{task_id}", response_model=TaskSchema)

@@ -3,7 +3,7 @@ import json
 from typing import Any, Optional
 import os
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, date
 
 load_dotenv()
 
@@ -12,6 +12,8 @@ REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379")
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
+            return obj.isoformat()
+        elif isinstance(obj, date):
             return obj.isoformat()
         return super().default(obj)
 

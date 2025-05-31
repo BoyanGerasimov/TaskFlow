@@ -4,15 +4,15 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import Annotated
 
-from app.core.security import (
+from core.security import (
     verify_password,
     get_password_hash,
     create_access_token,
     ACCESS_TOKEN_EXPIRE_MINUTES
 )
-from app.database import get_db
-from app.models import User
-from app.schemas.auth import UserCreate, Token, User as UserSchema
+from database import get_db
+from models import User
+from schemas.auth import UserCreate, Token, User as UserSchema
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")

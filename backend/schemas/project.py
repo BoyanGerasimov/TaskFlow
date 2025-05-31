@@ -1,18 +1,24 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional, List
 from .task import Task
 
 class ProjectBase(BaseModel):
-    title: str
+    name: str
     description: Optional[str] = None
+    status: Optional[str] = "Not Started"
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
 
 class ProjectCreate(ProjectBase):
     pass
 
 class ProjectUpdate(BaseModel):
-    title: Optional[str] = None
+    name: Optional[str] = None
     description: Optional[str] = None
+    status: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
 
 class Project(ProjectBase):
     id: int

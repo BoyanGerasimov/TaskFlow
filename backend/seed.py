@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from app.models import User, Project, Task
-from app.core.security import get_password_hash
+from models import User, Project, Task
+from core.security import get_password_hash
+from datetime import date
 
 def seed_database(db: Session):
     """Seed the database with initial data."""
@@ -18,14 +19,16 @@ def seed_database(db: Session):
 
     # Check if sample project exists
     project = db.query(Project).filter(
-        Project.title == "Sample Project",
+        Project.name == "Sample Project",
         Project.owner_id == test_user.id
     ).first()
     
     if not project:
         project = Project(
-            title="Sample Project",
+            name="Sample Project",
             description="A sample project for testing",
+            status="In Progress",
+            start_date=date.today(),
             owner_id=test_user.id
         )
         db.add(project)
@@ -43,18 +46,22 @@ def seed_database(db: Session):
             Task(
                 title="Complete API documentation",
                 description="Write comprehensive API documentation",
+                priority="High",
+                due_date=date.today(),
                 project_id=project.id,
                 owner_id=test_user.id
             ),
             Task(
                 title="Implement frontend",
                 description="Create React frontend for the application",
+                priority="Medium",
                 project_id=project.id,
                 owner_id=test_user.id
             ),
             Task(
                 title="Write tests",
                 description="Add unit and integration tests",
+                priority="High",
                 project_id=project.id,
                 owner_id=test_user.id
             )
@@ -66,7 +73,7 @@ def seed_database(db: Session):
         db.commit()
 
 if __name__ == "__main__":
-    from app.database import SessionLocal
+    from database import SessionLocal
     db = SessionLocal()
     try:
         seed_database(db)

@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from app.core.cache import cache
-from app.database import get_db
-from app.models import Project, User
-from app.schemas.project import ProjectCreate, ProjectUpdate, Project as ProjectSchema
-from app.core.security import oauth2_scheme
-from app.core.security import verify_token
+from core.cache import cache
+from database import get_db
+from models import Project, User
+from schemas.project import ProjectCreate, ProjectUpdate, Project as ProjectSchema
+from core.security import oauth2_scheme
+from core.security import verify_token
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
@@ -49,8 +49,12 @@ async def read_projects(
         return cached_projects
     
     projects = db.query(Project).filter(Project.owner_id == current_user.id).offset(skip).limit(limit).all()
-    cache.set(cache_key, [project.__dict__ for project in projects])
-    return projects
+    # Convert to schema objects for proper serialization
+    project_list = [ProjectSchema.model_validate(project) for project in projects]
+    # Convert to dict for caching
+    project_dicts = [project.model_dump() for project in project_list]
+    cache.set(cache_key, project_dicts)
+    return project_list
 
 @router.get("/{project_id}", response_model=ProjectSchema)
 async def read_project(

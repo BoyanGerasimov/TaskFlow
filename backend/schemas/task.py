@@ -1,12 +1,14 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 
 class TaskBase(BaseModel):
     title: str
     description: Optional[str] = None
     completed: bool = False
-    project_id: int
+    priority: Optional[str] = "Medium"
+    due_date: Optional[date] = None
+    project_id: Optional[int] = None
 
 class TaskCreate(TaskBase):
     pass
@@ -15,6 +17,8 @@ class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     completed: Optional[bool] = None
+    priority: Optional[str] = None
+    due_date: Optional[date] = None
     project_id: Optional[int] = None
 
 class Task(TaskBase):
