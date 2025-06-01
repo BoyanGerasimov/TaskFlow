@@ -2,6 +2,112 @@
 
 A modern task management application built with FastAPI, React, PostgreSQL, and Redis.
 
+## 📖 User Stories
+
+### Core User Stories
+
+**As a project manager, I want to:**
+- Create and manage multiple projects so that I can organize my work efficiently
+- Set project deadlines and track progress so that I can meet delivery commitments
+- Archive completed projects so that I can maintain a clean workspace while preserving history
+
+**As a team member, I want to:**
+- View all my assigned tasks in one place so that I can prioritize my daily work
+- Update task status and completion so that the team knows my progress
+- Filter tasks by priority and due date so that I can focus on urgent items
+
+**As a user, I want to:**
+- Register and securely log in so that my data is protected and personalized
+- Access the application from any device so that I can work remotely
+- Receive visual feedback on task and project status so that I can quickly assess progress
+
+### Advanced User Stories
+
+**As a team lead, I want to:**
+- Assign tasks to specific projects so that work is properly categorized
+- Set task priorities (High/Medium/Low) so that team members know what to focus on
+- View archived projects so that I can reference completed work
+
+**As a productivity-focused user, I want to:**
+- See a dashboard of all my projects and tasks so that I get a quick overview
+- Use keyboard shortcuts and intuitive UI so that I can work efficiently
+- Have my session maintained across browser refreshes so that I don't lose my work
+
+## 🎯 Use Cases
+
+### Primary Use Cases
+
+#### UC1: Project Management Workflow
+**Actor**: Project Manager  
+**Goal**: Create and manage a complete project lifecycle  
+**Precondition**: User is authenticated  
+
+**Main Success Scenario**:
+1. User creates a new project with name, description, and timeline
+2. User sets project status (Not Started/In Progress/Done)
+3. User creates tasks within the project
+4. User assigns priorities and due dates to tasks
+5. User tracks progress by updating task completion status
+6. User archives project when completed
+
+**Alternative Flows**:
+- If project needs modification, user can edit project details
+- If project is cancelled, user can delete project (with confirmation)
+
+#### UC2: Daily Task Management
+**Actor**: Team Member  
+**Goal**: Manage daily task workflow efficiently  
+**Precondition**: User is authenticated and has assigned tasks  
+
+**Main Success Scenario**:
+1. User views task list sorted by priority/due date
+2. User selects a task to work on
+3. User updates task progress and adds notes
+4. User marks task as completed when finished
+5. User moves to next priority task
+
+**Alternative Flows**:
+- If task details need changes, user can edit task information
+- If task becomes irrelevant, user can delete task
+- If task needs different priority, user can update priority level
+
+#### UC3: User Authentication & Session Management
+**Actor**: Any User  
+**Goal**: Secure access to personal task management data  
+**Precondition**: User has valid account or needs to create one  
+
+**Main Success Scenario**:
+1. New user registers with username, email, and password
+2. User logs in with credentials
+3. System provides JWT token for session management
+4. User accesses protected features with active session
+5. User logs out to end session
+
+**Alternative Flows**:
+- If credentials are invalid, system shows error message
+- If session expires, user is redirected to login
+- If registration fails, system provides specific error feedback
+
+### Secondary Use Cases
+
+#### UC4: Project Archive Management
+**Actor**: Project Manager  
+**Goal**: Maintain organized workspace with completed project history  
+
+**Scenario**: User completes a project, marks it as "Done", and accesses it later from the archived projects section for reference.
+
+#### UC5: Multi-device Access
+**Actor**: Remote Worker  
+**Goal**: Access task management from different devices  
+
+**Scenario**: User logs in from office computer, updates tasks, then later accesses the same data from mobile device or home computer.
+
+#### UC6: Data Persistence & Recovery
+**Actor**: Any User  
+**Goal**: Ensure work is not lost due to technical issues  
+
+**Scenario**: User's browser crashes or internet disconnects; when reconnecting, all data and progress are preserved.
+
 ## Features
 
 - **Frontend**: React + TypeScript with Bootstrap UI
