@@ -19,6 +19,7 @@ pipeline {
                     sh '''
                     python3 -m venv venv
                     . venv/bin/activate
+                    export PYTHONPATH=$PYTHONPATH:$(pwd)
                     pip install -r ../requirements.txt
                     pytest
                     '''
